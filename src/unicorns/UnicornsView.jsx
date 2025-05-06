@@ -29,44 +29,56 @@ const UnicornsView = () => {
   const handleExportPDF = () => {
     const doc = new jsPDF();
   
+    // Título
     doc.setFontSize(18);
-    doc.setTextColor(103, 80, 164); // color lila
-    doc.text("Listado de Unicornios", 105, 20, { align: "center" });
+    doc.setTextColor(167, 139, 250); // lila
+    doc.text("Gestión de Unicornios", 105, 20, { align: "center" });
   
+    // Tabla
     const tableData = unicorns.map((u) => [
       u.name,
-      u.data?.color,
-      u.data?.power,
-      u.data?.age,
-      u.data?.status || "Activo",
+      u.data?.color || "-",
+      u.data?.age || "-",
+      u.data?.power || "-",
+      u.data?.status || "-",
     ]);
   
     autoTable(doc, {
       startY: 30,
-      head: [["Nombre", "Color", "Poder", "Edad", "Estado"]],
+      head: [["Nombre", "Color", "Edad", "Poder", "Estado"]],
       body: tableData,
+      theme: "grid",
       headStyles: {
-        fillColor: [103, 80, 164],
-        textColor: 255,
+        fillColor: [244, 114, 182], // rosa
+        textColor: [255, 255, 255],
         fontStyle: "bold",
         halign: "center",
       },
       bodyStyles: {
+        fillColor: [42, 42, 64],
+        textColor: [255, 255, 255],
         halign: "center",
-        textColor: [40, 40, 40],
       },
       alternateRowStyles: {
-        fillColor: [245, 245, 255],
-      },
-      styles: {
-        fontSize: 11,
-        cellPadding: 4,
+        fillColor: [58, 58, 90],
       },
       margin: { top: 30 },
+      styles: {
+        fontSize: 10,
+        font: "helvetica",
+      },
     });
+  
+    // Fecha y autor al final
+    const fecha = new Date().toLocaleDateString();
+    doc.setFontSize(10);
+    doc.setTextColor(156, 163, 175); // gris suave
+    doc.text(`Generado el ${fecha}`, 14, doc.internal.pageSize.height - 20);
+    doc.text("Hecho por Pablo Aldo Amedey Dilena — 2025", 14, doc.internal.pageSize.height - 14);
   
     doc.save("unicornios.pdf");
   };
+    
 
   return (
     <div className="section fade-in">
